@@ -22,15 +22,16 @@ require_once(bot.php);
 require_once(commands.php);
 require_once(mesages.php);
 require_once(nickserv.php);
+date_default_timezone_set("Europe/Berlin");
 
 class run
 {
 	public $instances, $bot;
 
-	function __construct()
+	function __construct($host, $port, $user, $channel)
 	{
 		self::$instances = new instances();
-		self::$bot = self::$instances->getBot();
+		self::$bot = self::$instances->getBot($host, $port, $user, $channel);
 	}
 
 	function run()
@@ -41,3 +42,14 @@ class run
 		}
 	}
 }
+
+echo 'Server: ';
+$host = cin();
+echo 'Port: ';
+$port = cin();
+echo 'User: ';
+$user = cin();
+echo 'Channel: ';
+$user = cin();
+
+$run = new run($server, $port, $user, $channel);

@@ -21,11 +21,11 @@ class instances
 {
 	private $bot, $nickserv, $socket;
 
-	static function getBot()
+	static function getBot($host, $port, $user, $channel)
 	{
 		if (!is_object(self::$bot))
 		{
-			self::$bot = new bot();
+			self::$bot = new bot($host, $port, $user, $channel);
 		}
 		return self::$bot;
 	}

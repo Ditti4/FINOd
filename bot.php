@@ -34,10 +34,11 @@ class bot
 {
 	public $host, $port, $channel, $user, $mail, $pass, $socket, $instances, $commands;
 
-	function __construct($host, $port, $user)
+	function __construct($host, $port, $user, $channel)
 	{
 		$this->host = $host;
 		$this->port = $port;
+		$this->channel = $channel;
 		$this->socket = fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
