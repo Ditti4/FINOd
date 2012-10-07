@@ -52,7 +52,7 @@ class bot
 		}
 		else
 		{
-			self::log('error', "Couldn't connect to server. Please doublecheck everything.")
+			self::log('error', "Couldn't connect to server. Please doublecheck everything.");
 		}
 	}
 
