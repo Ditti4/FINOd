@@ -22,7 +22,7 @@ date_default_timezone_set("Europe/Berlin");
 
 function cin($chars = 0)
 {
-	$fopen = fopen('php://stdin',r);
+	$fopen = fopen('php://stdin', 'r');
 	if ($chars != 0 and is_int($chars))
 	{
 		$input = fgets($fopen,$chars);
@@ -169,9 +169,9 @@ if (cin() == 'y')
 	}
 	else
 	{
-		echo 'Okay, I'll try to do it. BUT I'll need a password for the registration: ';
+		echo 'Okay, I\'ll try to do it. BUT I\'ll need a password for the registration: ';
 		$nickserv['PASS'] = cin();
-		echo 'And you really need to trust me that I will not use the mail address (which you'll enter now) to send spam! ';
+		echo 'And you really need to trust me that I will not use the mail address (which you\'ll enter now) to send spam! ';
 		$nickserv['MAIL'] = cin();
 	}
 }
