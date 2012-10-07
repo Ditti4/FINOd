@@ -46,15 +46,17 @@ class bot
 	static function log($type, $msg)
 	{
 		strtoupper($type);
-		echo "[$type ".date(H).":".date(i).":".date(s)."] $msg\n";
+		echo "[$type ".date('H').":".date('i').":".date('s')."] $msg\n";
 	}
 
-	function send($cmd)
+	function getUser()
 	{
-		if (fwrite($this->socket, "$cmd\n\r"))
-		{
-			$this->log('send', $cmd);
-		}
+		return $this->user;
+	}
+
+	function getHost()
+	{
+		return $this->host;
 	}
 
 	function get()
@@ -65,17 +67,6 @@ class bot
 			$this->log('get', $input);
 			return $input;
 		}
-	}
-
-	function sender()
-	{
-		$input = $this->get();
-		return substr($input, 1, strpos($input, '!'));
-	}
-
-	function join($channel)
-	{
-		$this->send("JOIN $channel\n\r");
 	}
 
 	function pong($ping)

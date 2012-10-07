@@ -26,7 +26,7 @@ class messages
 		self::$message = $message;
 		self::$spaceexploded = explode(' ', $message);
 		self::$colonexploded = explode(':', $message);
-		self::$time = date(H).':'.date(i).':'.date(s);
+		self::$time = date('H').':'.date('i').':'.date('s');
 	}
 
 	function getSender()

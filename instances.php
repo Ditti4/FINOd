@@ -34,16 +34,16 @@ class instances
 	{
 		if (!is_object(self::$socket))
 		{
-			self::$socket = self::getBot()->$socket;
+			self::$socket = self::getBot()->socket;
 		}
 		return self::$socket;
 	}
 
-	static function getNickServ($server, $nickserv)
+	static function getNickServ()
 	{
 		if (!is_object(self::$nickserv))
 		{
-			self::$nickserv = new nickserv($server, $nickserv);
+			self::$nickserv = new nickserv(self::getBot()->server, self::getBot()->nickserv);
 		}
 		return self::$nickserv;
 	}
