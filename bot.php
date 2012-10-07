@@ -32,14 +32,26 @@ function cin()
 
 class bot
 {
-	public $host, $port, $channel, $user, $mail, $pass;
-	public $socket;
-	function __construct()
+	public $host, $port, $channel, $user, $mail, $pass, $socket, $instances, $commands;
+
+	function __construct($host, $port, $user)
 	{
+		$this->host = $host;
+		$this->port = $port;
 		$this->socket = fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
 			self::log('info', 'CONNECTED!');
+			fwrite($this->socket, "PASS NOPASS\n\r");
+			self::log('send', "PASS NOPASS");
+			fwrite($this->socket, "NICK $user\n\r");
+			self::log('send', "NICK $user");
+			fwrite($this->socket, "USER $user * * :Bot using FINOd\n\r");
+			self::log('send', "USER $user * * :Bot using FINOd");
+		}
+		else
+		{
+			self::log('error', "Couldn't connect to server. Please doublecheck everything.")
 		}
 	}
 
@@ -69,11 +81,19 @@ class bot
 		}
 	}
 
-	function pong($ping)
+	function handler($msg)
 	{
-		$pong = trim(str_replace('PING', 'PONG', $ping));
-		$pong .= ' FINOd@riditt.de';
-		return $pong;
+		$this->instances = new instances();
+		$this->commands = new commands();
+		if (substr(1, 4, $msg) == 'PING')
+		{
+			$this->commands->pong($msg);
+		}
+		elseif(strpos($msg, $server['USER']." :End of /MOTD command."))
+		{
+			$this->commands->join($this->channel);
+			$this->commands->umode("+B");
+		}
 	}
 }
 
