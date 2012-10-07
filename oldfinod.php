@@ -41,7 +41,7 @@ function sendCmd($cmd)
 	global $server;
 	if (fwrite($server['SOCKET'], "$cmd\n\r"));
 	{
-		echo "[SEND ".date(H).":".date(i).":".date(s)."] $cmd\n";
+		echo "[SEND ".date('H').":".date('i').":".date('s')."] $cmd\n";
 	}
 }
 
@@ -51,7 +51,7 @@ function getMsg()
 	$input = fgets($server['SOCKET'], 1024);
 	if (trim($input) != "")
 	{
-		echo "[GET ".date(H).":".date(i).":".date(s)."] $input\n";
+		echo "[GET ".date('H').":".date('i').":".date('s')."] $input\n";
 		return $input;
 	}
 }
@@ -93,7 +93,7 @@ function commandHandler($input)
 				if ($sender == $server['ADMIN'])
 				{
 					sendCmd("PRIVMSG ".$server['CHANNEL']." :$sender told me to quit. Bye!");
-					die("[QUIT ".date(H).":".date(i).":".date(s)."] $sender told me to quit!\n");
+					die("[QUIT ".date('H').":".date('i').":".date('s')."] $sender told me to quit!\n");
 				}
 				else
 				{
@@ -177,13 +177,13 @@ if (cin() == 'y')
 }
 
 
-echo "[INFO ".date(H).":".date(i).":".date(s)."] Okay, got all information needed. Will hand them over to ".$server['USER']."...\n\n";
+echo "[INFO ".date('H').":".date('i').":".date('s')."] Okay, got all information needed. Will hand them over to ".$server['USER']."...\n\n";
 
 $server['SOCKET'] = @fsockopen($server['HOST'], $server['PORT'], $errno, $errstr, 2);
 
 if ($server['SOCKET'])
 {
-	echo "[INFO ".date(H).":".date(i).":".date(s)."] CONNECTED!\n\n";
+	echo "[INFO ".date('H').":".date('i').":".date('s')."] CONNECTED!\n\n";
 	sendCmd("PASS NOPASS");
 	sendCmd("NICK ".$server['USER']);
 	sendCmd("USER ".$server['USER']." * * :Bot using FINOd");
@@ -194,6 +194,6 @@ if ($server['SOCKET'])
 }
 else
 {
-	echo "[ERROR ".date(H).":".date(i).":".date(s)."] Error while connecting to the server. Please doublecheck your input.\n";
+	echo "[ERROR ".date('H').":".date('i').":".date('s')."] Error while connecting to the server. Please doublecheck your input.\n";
 }
 ?>
