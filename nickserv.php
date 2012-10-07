@@ -22,21 +22,21 @@ class NickServ
 	public $bot, $user, $mail, $login;
 	private $pass;
 
-	class __construct($server, $nickserv)
+	function __construct()
 	{
 		$this->login = FALSE;
 		$this->bot = instances::getBot();
-		$this->user = $server['USER'];
-		$this->mail = $nickserv['MAIL'];
-		$this->pass = $nickserv['PASS'];
+		$this->user = $this->bot->server['USER'];
+		$this->mail = $this->bot->nickserv['MAIL'];
+		$this->pass = $this->bot->nickserv['PASS'];
 	}
 
-	class register()
+	function register()
 	{
 		$this->bot->send("PRIVMSG NickServ register $this->pass $this->mail");
 	}
 
-	class login()
+	function login()
 	{
 		if (!$this->login)
 		{
