@@ -17,10 +17,9 @@
 ## If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once('instances.php');
 require_once('bot.php');
 require_once('commands.php');
-require_once('mesages.php');
+require_once('messages.php');
 require_once('nickserv.php');
 date_default_timezone_set("Europe/Berlin");
 
@@ -30,8 +29,7 @@ class run
 
 	function __construct($host, $port, $user, $channel)
 	{
-		self::$instances = new instances();
-		self::$bot = self::$instances->getBot($host, $port, $user, $channel);
+		self::$bot = bot::getInstance($host, $port, $user, $channel);
 	}
 
 	function run()
@@ -50,6 +48,6 @@ $port = cin();
 echo 'User: ';
 $user = cin();
 echo 'Channel: ';
-$user = cin();
+$channel = cin();
 
-$run = new run($server, $port, $user, $channel);
+$run = new run($host, $port, $user, $channel);

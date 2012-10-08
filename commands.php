@@ -23,8 +23,7 @@ class commands
 
 	function __construct()
 	{
-		self::$instances = new instances();
-		self::$bot = self::$instances->getBot();
+		self::$bot = bot::getInstances();
 		self::$socket = self::$instances->getSocket();
 	}
 
