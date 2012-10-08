@@ -64,8 +64,17 @@ if (cin() == 'y')
 		echo 'Mail: ';
 		$mail = cin();
 	}
-	echo 'Password (be sure that nobody is behind you): ';
-	$pass = cin();
+	else
+	{
+		$mail = "";
+		echo 'Password (be sure that nobody is behind you): ';
+		$pass = cin();
+	}
+}
+else
+{
+	$mail = "";
+	$pass = "";
 }
 
 $run = new run($host, $port, $user, $channel, $mail, $pass);

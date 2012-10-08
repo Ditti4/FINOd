@@ -32,7 +32,7 @@ function cin()
 
 class bot
 {
-	public $host, $port, $channel, $user, $mail, $pass, $socket, $commands;
+	public $host, $port, $channel, $user, $mail, $pass, $socket, $commands, $nickserv;
 	public static $instance = NULL;
 
 	function __construct($host, $port, $user, $channel)
@@ -49,7 +49,7 @@ class bot
 			$this->log('send', "PASS NOPASS");
 			fwrite($this->socket, "NICK $user\n\r");
 			$this->log('send', "NICK $user");
-			fwrite($this->socket, "USER $user * * :Bot using FINOd\n\r");
+			fwrite($this->socket, "USER $user * * :$user is a Bot using FINOd\n\r");
 			$this->log('send', "USER $user * * :Bot using FINOd");
 		}
 		else
@@ -94,6 +94,16 @@ class bot
 		{
 			$this->commands->join($this->channel);
 			$this->commands->umode("+B");
+		}
+		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered."))
+		{
+			$this->nickserv = nickserv::getInstance();
+			$this->nickserv->register();
+		}
+		elseif (strpos($msg, 'NOTICE '.$this->user.' :This nickname is registered and protected. If it is your'))
+		{
+			$this->nickserv = nickserv::getInstance();
+			$this->nickserv->login();
 		}
 	}
 }

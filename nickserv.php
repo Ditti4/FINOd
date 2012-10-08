@@ -42,18 +42,24 @@ class NickServ
 
 	function register()
 	{
-		$this->bot->send('PRIVMSG NickServ register '.$this->pass.' '.$this->mail);
+		if ($this->pass != "" and $this->mail != "")
+		{
+			$this->bot->send('PRIVMSG NickServ register '.$this->pass.' '.$this->mail);
+		}
 	}
 
 	function login()
 	{
 		if (!$this->login)
 		{
-			$this->bot->send('PRIVMSG NickServ identify '.$this->pass);
-			if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
+			if ($this->pass != "")
 			{
-				$this->login = TRUE;
-				$bot->log('info', 'Identified with NickServ successfully!');
+				$this->bot->send('PRIVMSG NickServ identify '.$this->pass);
+				if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
+				{
+					$this->login = TRUE;
+					$bot->log('info', 'Identified with NickServ successfully!');
+				}
 			}
 		}
 		elseif ($this->login)
