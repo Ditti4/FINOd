@@ -39,6 +39,7 @@ class bot
 	{
 		$this->host = $host;
 		$this->port = $port;
+		$this->user = $user;
 		$this->channel = $channel;
 		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
@@ -70,16 +71,6 @@ class bot
 	static function log($type, $msg)
 	{
 		echo "[".strtoupper($type)." ".date('H').":".date('i').":".date('s')."] $msg\n";
-	}
-
-	function getUser()
-	{
-		return $this->user;
-	}
-
-	function getHost()
-	{
-		return $this->host;
 	}
 
 	function get()

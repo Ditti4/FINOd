@@ -19,17 +19,17 @@
 
 class commands
 {
-	public static $bot, $socket;
+	public $bot, $socket;
 
 	function __construct()
 	{
-		self::$bot = bot::getInstance("", "", "", "");
-		self::$socket = self::$bot->socket;
+		$this->bot = bot::getInstance("", "", "", "");
+		$this->socket = $this->bot->socket;
 	}
 
 	function send($command)
 	{
-		fwrite(self::$socket, $command."\n\r");
+		fwrite($this->socket, trim($command)."\n\r");
 	}
 
 	function pong($ping)
@@ -51,7 +51,8 @@ class commands
 
 	function umode($mode)
 	{
-		$this->send('MODE '.$this->bot->getUser().' '.$mode);
-		$this->bot->log('mode', $this->bot->getUser().' -> '.$mode);
+		echo $this->bot->user;
+		$this->send('MODE '.$this->bot->user.' '.$mode);
+		$this->bot->log('mode', $this->bot->user.' -> '.$mode);
 	}
 }
