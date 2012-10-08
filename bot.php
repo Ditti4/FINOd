@@ -39,7 +39,7 @@ class bot
 		$this->host = $host;
 		$this->port = $port;
 		$this->channel = $channel;
-		$this->socket = fsockopen($this->host, $this->port, $errno, $errstr, 2);
+		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
 			self::log('info', 'CONNECTED!');
@@ -52,15 +52,13 @@ class bot
 		}
 		else
 		{
-			self::log('error', "Couldn't connect to server. 
-Please doublecheck everything.");
+			self::log('error', "Couldn't connect to server. Please doublecheck everything.");
 		}
 	}
 
 	static function log($type, $msg)
 	{
-		strtoupper($type);
-		echo "[$type ".date('H').":".date('i').":".date('s')."] $msg\n";
+		echo "[".strtoupper($type)." ".date('H').":".date('i').":".date('s')."] $msg\n";
 	}
 
 	function getUser()

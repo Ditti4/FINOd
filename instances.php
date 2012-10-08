@@ -19,29 +19,20 @@
 
 class instances
 {
-	private $bot, $nickserv, $socket;
+	private $bot, $nickserv;
 
-	function getBot($host, $port, $user, $channel)
+	function getBot()
 	{
-		if (!is_object($this->bot))
+		if ($this->bot == NULL)
 		{
-			$this->bot = new bot($host, $port, $user, $channel);
+			$this->bot = new bot(run::$host, run::$port, run::$user, run::$channel);
 		}
 		return $this->bot;
 	}
 
-	function getSocket()
-	{
-		if (!is_object($this->socket))
-		{
-			$this->socket = $this->getBot()->socket;
-		}
-		return $this->socket;
-	}
-
 	function getNickServ()
 	{
-		if (!is_object($this->nickserv))
+		if ($this->nickserv == NULL)
 		{
 			$this->nickserv = new nickserv();
 		}
