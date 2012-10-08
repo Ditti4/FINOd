@@ -19,12 +19,12 @@
 
 class commands
 {
-	public $bot, $socket, $instances;
+	public static $bot, $socket;
 
 	function __construct()
 	{
-		self::$bot = bot::getInstances();
-		self::$socket = self::$instances->getSocket();
+		self::$bot = bot::getInstance($host, $port, $user, $channel);
+		self::$socket = self::$bot->socket;
 	}
 
 	function send($command)

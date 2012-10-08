@@ -25,10 +25,16 @@ date_default_timezone_set("Europe/Berlin");
 
 class run
 {
-	public $instances, $bot;
-
+	public static $instances, $bot;
+	public static $host, $port, $user, $channel, $pass, $mail;
 	function __construct($host, $port, $user, $channel)
 	{
+		self::$host = $host;
+		self::$port = $port;
+		self::$user = $user;
+		self::$channel = $channel;
+//		self::$pass = $pass;
+//		self::$mail = $mail;
 		self::$bot = bot::getInstance($host, $port, $user, $channel);
 	}
 
@@ -36,7 +42,7 @@ class run
 	{
 		while (true)
 		{
-			$this->bot->handler($this->bot->get);
+			self::$bot->handler(self::$bot->get);
 		}
 	}
 }
@@ -51,3 +57,7 @@ echo 'Channel: ';
 $channel = cin();
 
 $run = new run($host, $port, $user, $channel);
+<<<<<<< HEAD
+=======
+$run->run();
+>>>>>>> 7afa33acd1911ff04b3e14e69e67df769c79cef9

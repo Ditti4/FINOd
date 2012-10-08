@@ -32,14 +32,15 @@ function cin()
 
 class bot
 {
-	public $host, $port, $channel, $user, $mail, $pass, $socket, $instances, $commands;
+	public $host, $port, $channel, $user, $mail, $pass, $socket, $commands;
+	public static $instance = NULL;
 
 	function __construct($host, $port, $user, $channel)
 	{
 		$this->host = $host;
 		$this->port = $port;
 		$this->channel = $channel;
-		$this->socket = fsockopen($this->host, $this->port, $errno, $errstr, 2);
+		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
 			self::log('info', 'CONNECTED!');
@@ -53,13 +54,22 @@ class bot
 		else
 		{
 			self::log('error', "Couldn't connect to server. Please doublecheck everything.");
+			die();
 		}
+	}
+
+	static function getInstance($host, $port, $user, $channel)
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new self($host, $port, $user, $channel);
+		}
+		return self::$instance;
 	}
 
 	static function log($type, $msg)
 	{
-		strtoupper($type);
-		echo "[$type ".date('H').":".date('i').":".date('s')."] $msg\n";
+		echo "[".strtoupper($type)." ".date('H').":".date('i').":".date('s')."] $msg\n";
 	}
 
 	function getUser()
@@ -74,8 +84,8 @@ class bot
 
 	function get()
 	{
-		$input = trim(fgets($this->socket, 1024));
-		if (!empty($input))
+		$input = (fgets($this->socket, 1024));
+		if (trim($input) != "")
 		{
 			$this->log('get', $input);
 			return $input;
@@ -84,152 +94,16 @@ class bot
 
 	function handler($msg)
 	{
-		$this->instances = new instances();
-		$this->commands = new commands();
+		$this->commands = new commands;
 		if (substr(1, 4, $msg) == 'PING')
 		{
 			$this->commands->pong($msg);
 		}
-		elseif(strpos($msg, $server['USER']." :End of /MOTD command."))
+		elseif(strpos($msg, $this->user." :End of /MOTD command."))
 		{
 			$this->commands->join($this->channel);
 			$this->commands->umode("+B");
 		}
 	}
 }
-
-/*function no($sender)
-{
-	sendCmd("PRIVMSG $sender http://i3.kym-cdn.com/entries/icons/original/000/007/423/untitle.JPG");
-}
-
-function commandHandler($input)
-{
-	global $server;
-	$input = trim($input);
-	if (substr($input, 0, 4) == 'PING')
-	{
-		$cmd = str_replace('PING', 'PONG', $input)." :FINOd@riditt.de";
-		sendCmd($cmd);
-	}
-	elseif (strpos($input, $server['USER']." :End of /MOTD command."))
-	{
-		sendCmd("JOIN ".$server['CHANNEL']);
-		sendCmd("MODE ".$server['USER']." +B");
-	}
-	elseif (strpos($input, "PRIVMSG ".$server['USER']." :") and getSender($input) != "SpamScanner")
-	{
-		$sender = getSender($input);
-		$msg = substr($input, strpos($input, "PRIVMSG ".$server['USER']." :"), strlen($input));
-		$cmd = substr($msg, (strpos($msg, ':')+1), strlen($msg));
-		$param = explode(' ', $cmd);
-		switch ($param[0])
-		{
-			case 'stop':
-				if ($sender == $server['ADMIN'])
-				{
-					sendCmd("PRIVMSG ".$server['CHANNEL']." :$sender told me to quit. Bye!");
-					die("[QUIT ".date(H).":".date(i).":".date(s)."] $sender told me to quit!\n");
-				}
-				else
-				{
-					no($sender);
-				}
-				break;
-		}
-	}
-	elseif (strpos($input, "PRIVMSG ".$server['CHANNEL']." :!"))
-	{
-		$msg = substr($input, strpos($input, "PRIVMSG ".$server['CHANNEL']." :!"), strlen($input));
-		$cmd = substr($msg, (strpos($msg, ':!')+2), strlen($msg));
-		$param = explode(' ', $cmd);
-		switch ($param[0])
-		{
-			case 'wiki':
-				$query = "";
-				for ($i = 1; $i <= (count($param)-1); $i++)
-				{
-					$query .= $param[$i];
-					if ($i < (count($param)-1))
-					{
-						$query .= '_';
-					}
-				}
-				sendCmd("PRIVMSG ".$server['CHANNEL']." :http://de.wikipedia.org/wiki/$query");
-				break;
-			case 'google':
-				$query = "";
-				for ($i = 1; $i <= (count($param)-1); $i++)
-				{
-					$query .= $param[$i];
-					if ($i < (count($param)-1))
-					{
-						$query .= '+';
-					}
-				}
-				sendCmd("PRIVMSG ".$server['CHANNEL']." :http://google.com?q=$query");
-				break;
-		}
-	}
-}
-
-$server = array();
-$nickserv = array();
-
-echo 'Enter server: ';
-$server['HOST'] = cin();
-echo 'Enter the server port: ';
-$server['PORT'] = cin();
-echo 'Enter the username for the bot: ';
-$server['USER'] = cin();
-echo 'Now I need your nickname (for sending admin commands to the bot): ';
-$server['ADMIN'] = cin();
-echo 'And now enter the channel: ';
-$server['CHANNEL'] = cin();
-
-echo 'What\'s your timezone? (default: Europe/Berlin) ';
-$timzone = cin();
-if (!empty($timezone))
-{
-date_default_timezone_set($timezone);
-}
-
-echo 'Do you want '.$server['USER'].' to register and identify on startup? (default: n) ';
-if (cin() == 'y')
-{
-	echo 'Is your bot already registered? (default: n) ';
-	if (cin() == 'y')
-	{
-		echo 'Okay, then please give me the login password: ';
-		$nickserv['PASS'] = cin();
-	}
-	else
-	{
-		echo 'Okay, I\'ll try to do it. BUT I\'ll need a password for the registration: ';
-		$nickserv['PASS'] = cin();
-		echo 'And you really need to trust me that I will not use the mail address (which you\'ll enter now) to send spam! ';
-		$nickserv['MAIL'] = cin();
-	}
-}
-
-
-echo "[INFO ".date(H).":".date(i).":".date(s)."] Okay, got all information needed. Will hand them over to ".$server['USER']."...\n\n";
-
-$server['SOCKET'] = @fsockopen($server['HOST'], $server['PORT'], $errno, $errstr, 2);
-
-if ($server['SOCKET'])
-{
-	echo "[INFO ".date(H).":".date(i).":".date(s)."] CONNECTED!\n\n";
-	sendCmd("PASS NOPASS");
-	sendCmd("NICK ".$server['USER']);
-	sendCmd("USER ".$server['USER']." * * :Bot using FINOd");
-	while (true)
-	{
-		commandHandler(getMsg());
-	}
-}
-else
-{
-	echo "[ERROR ".date(H).":".date(i).":".date(s)."] Error while connecting to the server. Please doublecheck your input.\n";
-}*/
 ?>
