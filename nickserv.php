@@ -20,6 +20,7 @@
 class NickServ
 {
 	public $bot, $user, $mail, $login;
+	public static $instance = NULL;
 	private $pass;
 
 	function __construct()
