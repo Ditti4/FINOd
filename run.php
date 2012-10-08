@@ -26,7 +26,7 @@ date_default_timezone_set("Europe/Berlin");
 
 class run
 {
-	public $instances, $bot;
+	public static $instances, $bot;
 
 	function __construct($host, $port, $user, $channel)
 	{
