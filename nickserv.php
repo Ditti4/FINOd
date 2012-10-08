@@ -36,7 +36,7 @@ class NickServ
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new self($host, $port, $user, $channel);
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
