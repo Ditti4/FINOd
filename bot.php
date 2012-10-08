@@ -84,8 +84,8 @@ class bot
 
 	function get()
 	{
-		$input = trim(fgets($this->socket, 1024));
-		if (!empty($input))
+		$input = (fgets($this->socket, 1024));
+		if (trim($input) != "")
 		{
 			$this->log('get', $input);
 			return $input;
@@ -94,12 +94,12 @@ class bot
 
 	function handler($msg)
 	{
-		$this->commands = new commands();
+		$this->commands = new commands;
 		if (substr(1, 4, $msg) == 'PING')
 		{
 			$this->commands->pong($msg);
 		}
-		elseif(strpos($msg, $server['USER']." :End of /MOTD command."))
+		elseif(strpos($msg, $this->user." :End of /MOTD command."))
 		{
 			$this->commands->join($this->channel);
 			$this->commands->umode("+B");
