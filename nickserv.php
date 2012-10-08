@@ -25,12 +25,12 @@ class NickServ
 	function __construct()
 	{
 		$this->login = FALSE;
-		$this->bot = bot::getInstance($host, $port, $user, $channel);
+		$this->bot = bot::getInstance("", "", "", "");
 		$this->user = $this->bot->user;
 		$this->mail = $this->bot->mail;
 		$this->pass = $this->bot->pass;
 	}
-	
+
 	static function getInstance()
 	{
 		if (self::$instance == NULL)
@@ -42,14 +42,14 @@ class NickServ
 
 	function register()
 	{
-		$this->bot->send("PRIVMSG NickServ register $this->pass $this->mail");
+		$this->bot->send('PRIVMSG NickServ register '.$this->pass.' '.$this->mail);
 	}
 
 	function login()
 	{
 		if (!$this->login)
 		{
-			$this->bot->send("PRIVMSG NickServ identify $this->pass");
+			$this->bot->send('PRIVMSG NickServ identify '.$this->pass);
 			if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
 			{
 				$this->login = TRUE;

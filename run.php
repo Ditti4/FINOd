@@ -27,14 +27,14 @@ class run
 {
 	public static $instances, $bot;
 	public static $host, $port, $user, $channel, $pass, $mail;
-	function __construct($host, $port, $user, $channel)
+	function __construct($host, $port, $user, $channel, $mail, $pass)
 	{
 		self::$host = $host;
 		self::$port = $port;
 		self::$user = $user;
 		self::$channel = $channel;
-//		self::$pass = $pass;
-//		self::$mail = $mail;
+		self::$pass = $pass;
+		self::$mail = $mail;
 		self::$bot = bot::getInstance($host, $port, $user, $channel);
 	}
 
@@ -55,6 +55,20 @@ echo 'User: ';
 $user = cin();
 echo 'Channel: ';
 $channel = cin();
+echo 'Use NickServ? (default: n) ';
+if (cin() == 'y')
+{
+	echo 'Already registered? (default: n) ';
+	if (cin() != 'y')
+	{
+		echo 'Mail: ';
+		$mail = cin();
+	}
+	echo 'Password (be sure that nobody is behind you): ';
+	$pass = cin();
+}
 
-$run = new run($host, $port, $user, $channel);
+$run = new run($host, $port, $user, $channel, $mail, $pass);
 $run->run();
+
+?>
