@@ -17,7 +17,6 @@
 ## If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once('instances.php');
 require_once('bot.php');
 require_once('commands.php');
 require_once('messages.php');
@@ -36,8 +35,7 @@ class run
 		self::$channel = $channel;
 //		self::$pass = $pass;
 //		self::$mail = $mail;
-		self::$instances = new instances;
-		self::$bot = self::$instances->getBot($host, $port, $user, $channel);
+		self::$bot = bot::getInstance($host, $port, $user, $channel);
 	}
 
 	function run()

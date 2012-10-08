@@ -25,10 +25,19 @@ class NickServ
 	function __construct()
 	{
 		$this->login = FALSE;
-		$this->bot = instances::getBot();
+		$this->bot = bot::getInstance($host, $port, $user, $channel);
 		$this->user = $this->bot->user;
 		$this->mail = $this->bot->mail;
 		$this->pass = $this->bot->pass;
+	}
+	
+	static function getInstance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new self($host, $port, $user, $channel);
+		}
+		return self::$instance;
 	}
 
 	function register()
