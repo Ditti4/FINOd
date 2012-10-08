@@ -20,7 +20,7 @@
 require_once('instances.php');
 require_once('bot.php');
 require_once('commands.php');
-require_once('mesages.php');
+require_once('messages.php');
 require_once('nickserv.php');
 date_default_timezone_set("Europe/Berlin");
 

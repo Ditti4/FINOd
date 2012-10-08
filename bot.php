@@ -52,7 +52,8 @@ class bot
 		}
 		else
 		{
-			self::log('error', "Couldn't connect to server. Please doublecheck everything.")
+			self::log('error', "Couldn't connect to server. 
+Please doublecheck everything.");
 		}
 	}
 
@@ -98,7 +99,7 @@ class bot
 	}
 }
 
-function no($sender)
+/*function no($sender)
 {
 	sendCmd("PRIVMSG $sender http://i3.kym-cdn.com/entries/icons/original/000/007/423/untitle.JPG");
 }
@@ -231,5 +232,5 @@ if ($server['SOCKET'])
 else
 {
 	echo "[ERROR ".date(H).":".date(i).":".date(s)."] Error while connecting to the server. Please doublecheck your input.\n";
-}
+}*/
 ?>
