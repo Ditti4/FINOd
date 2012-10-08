@@ -30,7 +30,7 @@ class run
 
 	function __construct($host, $port, $user, $channel)
 	{
-		self::$instances = new instances();
+		self::$instances = new instances;
 		self::$bot = self::$instances->getBot($host, $port, $user, $channel);
 	}
 

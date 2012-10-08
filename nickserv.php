@@ -26,9 +26,9 @@ class NickServ
 	{
 		$this->login = FALSE;
 		$this->bot = instances::getBot();
-		$this->user = $this->bot->server['USER'];
-		$this->mail = $this->bot->nickserv['MAIL'];
-		$this->pass = $this->bot->nickserv['PASS'];
+		$this->user = $this->bot->user;
+		$this->mail = $this->bot->mail;
+		$this->pass = $this->bot->pass;
 	}
 
 	function register()
