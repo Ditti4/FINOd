@@ -57,7 +57,4 @@ echo 'Channel: ';
 $channel = cin();
 
 $run = new run($host, $port, $user, $channel);
-<<<<<<< HEAD
-=======
 $run->run();
->>>>>>> 7afa33acd1911ff04b3e14e69e67df769c79cef9
