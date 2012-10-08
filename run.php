@@ -42,7 +42,7 @@ class run
 	{
 		while (true)
 		{
-			self::$bot->handler(self::$bot->get);
+			self::$bot->handler(self::$bot->get());
 		}
 	}
 }

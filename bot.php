@@ -43,17 +43,17 @@ class bot
 		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
-			self::log('info', 'CONNECTED!');
+			$this->log('info', 'CONNECTED!');
 			fwrite($this->socket, "PASS NOPASS\n\r");
-			self::log('send', "PASS NOPASS");
+			$this->log('send', "PASS NOPASS");
 			fwrite($this->socket, "NICK $user\n\r");
-			self::log('send', "NICK $user");
+			$this->log('send', "NICK $user");
 			fwrite($this->socket, "USER $user * * :Bot using FINOd\n\r");
-			self::log('send', "USER $user * * :Bot using FINOd");
+			$this->log('send', "USER $user * * :Bot using FINOd");
 		}
 		else
 		{
-			self::log('error', "Couldn't connect to server. Please doublecheck everything.");
+			$this->log('error', "Couldn't connect to server. Please doublecheck everything.");
 			die();
 		}
 	}
@@ -94,8 +94,8 @@ class bot
 
 	function handler($msg)
 	{
-		$this->commands = new commands;
-		if (substr(1, 4, $msg) == 'PING')
+		$this->commands = new commands();
+		if (substr($msg, 0, 4) == 'PING')
 		{
 			$this->commands->pong($msg);
 		}

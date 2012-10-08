@@ -23,13 +23,13 @@ class commands
 
 	function __construct()
 	{
-		self::$bot = bot::getInstance($host, $port, $user, $channel);
+		self::$bot = bot::getInstance("", "", "", "");
 		self::$socket = self::$bot->socket;
 	}
 
 	function send($command)
 	{
-		fwrite($this->socket, $command."\n\r");
+		fwrite(self::$socket, $command."\n\r");
 	}
 
 	function pong($ping)
