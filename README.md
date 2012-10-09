@@ -27,7 +27,7 @@ How do I use FINOd?
 
 Well, it's very simple to use it.
 Download it (git clone is my suggestion so you can stay uo to date easily) to any folder on your
-server or home computer and run "php5 finod.php".
+server or home computer and run "php5 run.php".
 Important: You'll need to have php5 installed.
 
 How does it work?
