@@ -35,12 +35,14 @@ class bot
 	public $host, $port, $channel, $user, $mail, $pass, $socket, $commands, $nickserv;
 	public static $instance = NULL;
 
-	function __construct($host, $port, $user, $channel)
+	function __construct($host, $port, $user, $channel, $mail, $pass)
 	{
 		$this->host = $host;
 		$this->port = $port;
 		$this->user = $user;
 		$this->channel = $channel;
+		$this->mail = $mail;
+		$this->pass = $pass;
 		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
 		if ($this->socket)
 		{
@@ -59,11 +61,11 @@ class bot
 		}
 	}
 
-	static function getInstance($host, $port, $user, $channel)
+	static function getInstance($host, $port, $user, $channel, $mail, $pass)
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new self($host, $port, $user, $channel);
+			self::$instance = new self($host, $port, $user, $channel, $mail, $pass);
 		}
 		return self::$instance;
 	}
@@ -86,6 +88,7 @@ class bot
 	function handler($msg)
 	{
 		$this->commands = new commands();
+		$messages = new messages($msg);
 		if (substr($msg, 0, 4) == 'PING')
 		{
 			$this->commands->pong($msg);
@@ -95,12 +98,12 @@ class bot
 			$this->commands->join($this->channel);
 			$this->commands->umode("+B");
 		}
-		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered."))
+		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered") and strtolower($messages->getSender()) == 'nickserv')
 		{
 			$this->nickserv = nickserv::getInstance();
 			$this->nickserv->register();
 		}
-		elseif (strpos($msg, 'NOTICE '.$this->user.' :This nickname is registered and protected. If it is your'))
+		elseif (strpos($msg, 'NOTICE '.$this->user.' :This nickname is registered and protected. If it is your') and strtolower($messages->getSender()) == 'nickserv')
 		{
 			$this->nickserv = nickserv::getInstance();
 			$this->nickserv->login();

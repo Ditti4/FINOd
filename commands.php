@@ -23,7 +23,7 @@ class commands
 
 	function __construct()
 	{
-		$this->bot = bot::getInstance("", "", "", "");
+		$this->bot = bot::getInstance("", "", "", "", "", "");
 		$this->socket = $this->bot->socket;
 	}
 

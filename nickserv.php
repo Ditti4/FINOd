@@ -19,14 +19,14 @@
 
 class NickServ
 {
-	public $bot, $user, $mail, $login;
+	public $commands, $user, $mail, $login, $pass, $bot;
 	public static $instance = NULL;
-	private $pass;
 
 	function __construct()
 	{
 		$this->login = FALSE;
-		$this->bot = bot::getInstance("", "", "", "");
+		$this->commands = new commands;
+		$this->bot = bot::getInstance("", "", "", "", "", "");
 		$this->user = $this->bot->user;
 		$this->mail = $this->bot->mail;
 		$this->pass = $this->bot->pass;
@@ -45,7 +45,7 @@ class NickServ
 	{
 		if ($this->pass != "" and $this->mail != "")
 		{
-			$this->bot->send('PRIVMSG NickServ register '.$this->pass.' '.$this->mail);
+			$this->commands->privmsg('NickServ', 'register '.$this->pass.' '.$this->mail);
 		}
 	}
 
@@ -55,11 +55,11 @@ class NickServ
 		{
 			if ($this->pass != "")
 			{
-				$this->bot->send('PRIVMSG NickServ identify '.$this->pass);
+				$this->commands->privmsg('NickServ', 'identify '.$this->pass);
 				if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
 				{
 					$this->login = TRUE;
-					$bot->log('info', 'Identified with NickServ successfully!');
+					$bot->log('info', 'Successfully identified with NickServ!');
 				}
 			}
 		}

@@ -33,9 +33,9 @@ class run
 		self::$port = $port;
 		self::$user = $user;
 		self::$channel = $channel;
-		self::$pass = $pass;
-		self::$mail = $mail;
-		self::$bot = bot::getInstance($host, $port, $user, $channel);
+//		self::$pass = $pass;
+//		self::$mail = $mail;
+		self::$bot = bot::getInstance($host, $port, $user, $channel, $mail, $pass);
 	}
 
 	function run()
@@ -67,9 +67,9 @@ if (cin() == 'y')
 	else
 	{
 		$mail = "";
-		echo 'Password (be sure that nobody is behind you): ';
-		$pass = cin();
 	}
+	echo 'Password (be sure that nobody is behind you): ';
+		$pass = cin();
 }
 else
 {

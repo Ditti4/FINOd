@@ -23,17 +23,17 @@ class messages
 
 	function __construct($message)
 	{
-		self::$message = $message;
-		self::$spaceexploded = explode(' ', $message);
-		self::$colonexploded = explode(':', $message);
-		self::$time = date('H').':'.date('i').':'.date('s');
+		$this->message = $message;
+		$this->spaceexploded = explode(' ', $message);
+		$this->colonexploded = explode(':', $message);
+		$this->time = date('H').':'.date('i').':'.date('s');
 	}
 
 	function getSender()
 	{
 		if (empty($this->sender))
 		{
-			$this->sender = substr($this->message, 1, strpos($this->message, '!'));
+			$this->sender = substr($this->message, 1, (strpos($this->message, '!')-1));
 		}
 		return $this->sender;
 	}
