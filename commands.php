@@ -23,13 +23,14 @@ class commands
 
 	function __construct()
 	{
-		$this->bot = bot::getInstance("", "", "", "", "", "");
+		$this->bot = bot::getInstance("", "", "", "", "", "", "");
 		$this->socket = $this->bot->socket;
 	}
 
 	function send($command)
 	{
 		fwrite($this->socket, trim($command)."\n\r");
+		$this->bot->log('send', $command);
 	}
 
 	function pong($ping)
@@ -40,19 +41,15 @@ class commands
 	function privmsg($channel, $msg)
 	{
 		$this->send("PRIVMSG $channel :$msg");
-		$this->bot->log('msg', '->'.$channel.': '.$msg);
 	}
 
 	function join($channel)
 	{
 		$this->send("JOIN $channel");
-		$this->bot->log('join', '>>> '.$channel);
 	}
 
 	function umode($mode)
 	{
-		echo $this->bot->user;
 		$this->send('MODE '.$this->bot->user.' '.$mode);
-		$this->bot->log('mode', $this->bot->user.' -> '.$mode);
 	}
 }

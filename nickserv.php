@@ -22,50 +22,45 @@ class NickServ
 	public $commands, $user, $mail, $login, $pass, $bot;
 	public static $instance = NULL;
 
-	function __construct()
+	function __construct($user, $mail, $pass)
 	{
 		$this->login = FALSE;
 		$this->commands = new commands;
-		$this->bot = bot::getInstance("", "", "", "", "", "");
-		$this->user = $this->bot->user;
-		$this->mail = $this->bot->mail;
-		$this->pass = $this->bot->pass;
+		$this->bot = bot::getInstance("", "", "", "", "", "", "");
+		$this->user = $user;
+		$this->mail = $mail;
+		$this->pass = $pass;
 	}
 
-	static function getInstance()
+	static function getInstance($user, $mail, $pass)
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new self();
+			self::$instance = new self($user, $mail, $pass);
 		}
 		return self::$instance;
 	}
 
 	function register()
 	{
-		if ($this->pass != "" and $this->mail != "")
-		{
-			$this->commands->privmsg('NickServ', 'register '.$this->pass.' '.$this->mail);
-		}
+		$this->commands->privmsg('NickServ', 'register '.$this->pass.' '.$this->mail);
 	}
 
 	function login()
 	{
 		if (!$this->login)
 		{
-			if ($this->pass != "")
+			var_dump($this->pass);
+			$this->commands->privmsg('NickServ', 'identify '.$this->pass);
+			if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
 			{
-				$this->commands->privmsg('NickServ', 'identify '.$this->pass);
-				if (strpos($this->bot->get(), 'Password accepted - you are now recognized.'))
-				{
-					$this->login = TRUE;
-					$bot->log('info', 'Successfully identified with NickServ!');
-				}
+				$this->login = TRUE;
+				$this->bot->log('info', 'Successfully identified with NickServ!');
 			}
 		}
 		elseif ($this->login)
 		{
-			$this->log('warning', 'Already logged in!');
+			$this->bot->log('warning', 'Already logged in!');
 		}
 	}
 }

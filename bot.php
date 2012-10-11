@@ -35,12 +35,13 @@ class bot
 	public $host, $port, $channel, $user, $mail, $pass, $socket, $commands, $nickserv;
 	public static $instance = NULL;
 
-	function __construct($host, $port, $user, $channel, $mail, $pass)
+	function __construct($host, $port, $user, $channel, $nickserv, $mail, $pass)
 	{
 		$this->host = $host;
 		$this->port = $port;
 		$this->user = $user;
 		$this->channel = $channel;
+		$this->nickserv = $nickserv;
 		$this->mail = $mail;
 		$this->pass = $pass;
 		$this->socket = @fsockopen($this->host, $this->port, $errno, $errstr, 2);
@@ -49,10 +50,10 @@ class bot
 			$this->log('info', 'CONNECTED!');
 			fwrite($this->socket, "PASS NOPASS\n\r");
 			$this->log('send', "PASS NOPASS");
-			fwrite($this->socket, "NICK $user\n\r");
-			$this->log('send', "NICK $user");
-			fwrite($this->socket, "USER $user * * :$user is a Bot using FINOd\n\r");
-			$this->log('send', "USER $user * * :Bot using FINOd");
+			fwrite($this->socket, "NICK ".$this->user."\n\r");
+			$this->log('send', "NICK ".$this->user);
+			fwrite($this->socket, "USER ".$this->user." * * :".$this->user." is a Bot using FINOd\n\r");
+			$this->log('send', "USER ".$this->user." * * :".$this->user." is aBot using FINOd");
 		}
 		else
 		{
@@ -61,16 +62,16 @@ class bot
 		}
 	}
 
-	static function getInstance($host, $port, $user, $channel, $mail, $pass)
+	static function getInstance($host, $port, $user, $channel, $nickserv, $mail, $pass)
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new self($host, $port, $user, $channel, $mail, $pass);
+			self::$instance = new self($host, $port, $user, $channel, $nickserv, $mail, $pass);
 		}
 		return self::$instance;
 	}
 
-	static function log($type, $msg)
+	function log($type, $msg)
 	{
 		echo "[".strtoupper($type)." ".date('H').":".date('i').":".date('s')."] $msg\n";
 	}
@@ -87,26 +88,26 @@ class bot
 
 	function handler($msg)
 	{
-		$this->commands = new commands();
+		$commands = new commands();
 		$messages = new messages($msg);
 		if (substr($msg, 0, 4) == 'PING')
 		{
-			$this->commands->pong($msg);
+			$commands->pong($msg);
 		}
 		elseif(strpos($msg, $this->user." :End of /MOTD command."))
 		{
-			$this->commands->join($this->channel);
-			$this->commands->umode("+B");
+			$commands->join($this->channel);
+			$commands->umode("+B");
 		}
-		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered") and strtolower($messages->getSender()) == 'nickserv')
+		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered") and strtolower($messages->getSender()) == 'nickserv' and strtolower($this->nickserv) == 'y' and $this->pass != "" and $this->mail != "")
 		{
-			$this->nickserv = nickserv::getInstance();
-			$this->nickserv->register();
+			$nickserv = nickserv::getInstance($this->user, $this->mail, $this->pass);
+			$nickserv->register();
 		}
-		elseif (strpos($msg, 'NOTICE '.$this->user.' :This nickname is registered and protected. If it is your') and strtolower($messages->getSender()) == 'nickserv')
+		elseif (strpos($msg, 'NOTICE '.$this->user.' :This nickname is registered and protected.  If it is your') and strtolower($messages->getSender()) == 'nickserv' and strtolower($this->nickserv) == 'y')
 		{
-			$this->nickserv = nickserv::getInstance();
-			$this->nickserv->login();
+			$nickserv = nickserv::getInstance($this->user, $this->mail, $this->pass);
+			$nickserv->login();
 		}
 	}
 }

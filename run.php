@@ -25,24 +25,17 @@ date_default_timezone_set("Europe/Berlin");
 
 class run
 {
-	public static $instances, $bot;
-	public static $host, $port, $user, $channel, $pass, $mail;
-	function __construct($host, $port, $user, $channel, $mail, $pass)
+	public $bot;
+	function __construct($host, $port, $user, $channel, $nickserv, $mail, $pass)
 	{
-		self::$host = $host;
-		self::$port = $port;
-		self::$user = $user;
-		self::$channel = $channel;
-//		self::$pass = $pass;
-//		self::$mail = $mail;
-		self::$bot = bot::getInstance($host, $port, $user, $channel, $mail, $pass);
+		$this->bot = bot::getInstance($host, $port, $user, $channel, $nickserv, $mail, $pass);
 	}
 
 	function run()
 	{
 		while (true)
 		{
-			self::$bot->handler(self::$bot->get());
+			$this->bot->handler($this->bot->get());
 		}
 	}
 }
@@ -56,7 +49,8 @@ $user = cin();
 echo 'Channel: ';
 $channel = cin();
 echo 'Use NickServ? (default: n) ';
-if (cin() == 'y')
+$nickserv = cin();
+if ($nickserv == 'y')
 {
 	echo 'Already registered? (default: n) ';
 	if (cin() != 'y')
@@ -77,7 +71,7 @@ else
 	$pass = "";
 }
 
-$run = new run($host, $port, $user, $channel, $mail, $pass);
+$run = new run($host, $port, $user, $channel, $nickserv, $mail, $pass);
 $run->run();
 
 ?>
