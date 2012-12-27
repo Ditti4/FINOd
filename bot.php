@@ -97,6 +97,7 @@ class bot
 		elseif(strpos($msg, $this->user." :End of /MOTD command."))
 		{
 			$commands->join($this->channel);
+			//$commands->privmsg("#Brotkasten", "\xe4 \xc3\xb6 \xc3\xbc \xc3\x9f \xc3\x84 \xc3\x96 \xc3\x9c");
 			$commands->umode("+B");
 		}
 		elseif (strpos($msg, "NOTICE ".$this->user." :Your nick isn't registered") and strtolower($messages->getSender()) == 'nickserv' and strtolower($this->nickserv) == 'y' and $this->pass != "" and $this->mail != "")
@@ -108,6 +109,11 @@ class bot
 		{
 			$nickserv = nickserv::getInstance($this->user, $this->mail, $this->pass);
 			$nickserv->login();
+		}
+		elseif ($messages->getCommandPrefix() == "!")
+		{
+			$usercommands = new usercommands;
+			$usercommands->handler($msg);
 		}
 	}
 }

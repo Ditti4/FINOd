@@ -21,6 +21,7 @@ require_once('bot.php');
 require_once('commands.php');
 require_once('messages.php');
 require_once('nickserv.php');
+require_once('usercommands.php');
 date_default_timezone_set("Europe/Berlin");
 
 class run

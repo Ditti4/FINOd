@@ -17,43 +17,34 @@
 ## If not, see <http://www.gnu.org/licenses/>.
 */
 
-class commands
+class usercommands
 {
-	public $bot, $socket;
-
+	public $ucommands, $messsages, $commands;
 	function __construct()
 	{
-		$this->bot = bot::getInstance("", "", "", "", "", "", "");
-		$this->socket = $this->bot->socket;
+		$file = "commands.xml";
+		$this->ucommands = simplexml_load_file($file);
 	}
 
-	function send($command)
+	function handler($msg)
 	{
-		fwrite($this->socket, trim($command)."\n");
-		$this->bot->log('send', $command);
-		if(strtolower(substr($command, 0, 4)) == "quit")
+		$this->messages = new messages($msg);
+		$this->commands = new commands;
+		for($i = 0; $i<count($this->ucommands); $i++)
 		{
-			die("QUIT command stops the bot. Bye.\n");
+            if($this->messages->getCommand() == $this->ucommands->item[$i]->command)
+            {
+                $this->commands->send($this->replace($this->ucommands->item[$i]->trigger));
+				break;
+            }
 		}
 	}
-
-	function pong($ping)
+	
+	function replace($msg)
 	{
-		$this->send(trim(str_replace('PING', 'PONG', $ping)).' FINOd (https://github.com/Ditti4/FINOd)');
-	}
-
-	function privmsg($channel, $msg)
-	{
-		$this->send("PRIVMSG $channel :$msg");
-	}
-
-	function join($channel)
-	{
-		$this->send("JOIN $channel");
-	}
-
-	function umode($mode)
-	{
-		$this->send('MODE '.$this->bot->user.' '.$mode);
+		$msg = str_replace('{$sender}', $this->messages->getSender(), $msg);
+		$msg = str_replace('{$args}', $this->messages->getArgs(), $msg);
+		return $msg;
 	}
 }
+?>

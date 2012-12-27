@@ -19,13 +19,16 @@
 
 class messages
 {
-	public $message, $sender, $channel, $time, $spaceexploded, $colonexploded, $command;
+	public $message, $sender, $channel, $time, $spaceexploded, $colonexploded, $exexploded, $command;
 
 	function __construct($message)
 	{
 		$this->message = $message;
 		$this->spaceexploded = explode(' ', $message);
-		$this->colonexploded = explode(':', $message);
+		$this->colonexploded = @explode(':', $message);
+		$this->exexploded = @explode('!', $message);
+		$this->argexploded = @explode(' ', $this->exexploded[2]);
+		
 		$this->time = date('H').':'.date('i').':'.date('s');
 	}
 
@@ -50,6 +53,21 @@ class messages
 	function getTime()
 	{
 		return $this->time;
+	}
+	
+	function getCommandPrefix()
+	{
+		return substr($this->colonexploded[2], 0, 1);
+	}
+	
+	function getCommand()
+	{
+		return $this->argexploded[0];
+	}
+	
+	function getArgs()
+	{
+		return $this->argexploded[1];
 	}
 
 }
