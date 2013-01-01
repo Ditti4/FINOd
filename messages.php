@@ -65,9 +65,24 @@ class messages
 		return $this->argexploded[0];
 	}
 	
+	function getArg($arg)
+	{
+		return $this->argexploded[$arg];
+	}
+	
 	function getArgs()
 	{
-		return $this->argexploded[1];
+		$return = '';
+		for($i = 1; $i<sizeof($this->argexploded); $i++)
+		{
+			$return .= $this->argexploded[$i].' ';
+		}
+		return $return;
+	}
+	
+	function getType()
+	{
+		return $this->spaceexploded[1];
 	}
 
 }

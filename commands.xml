@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <commands>
-	 <item>
-	 	<command>quit</command>
-	 	 <trigger>QUIT :{$args}</trigger>
-	 </item>
+	<item>
+		<perm>Toastbrot</perm>
+		<command>quit</command>
+	 	<trigger>QUIT :{$args}</trigger>
+	</item>
 </commands>

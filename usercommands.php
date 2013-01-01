@@ -19,7 +19,7 @@
 
 class usercommands
 {
-	public $ucommands, $messsages, $commands;
+	public $ucommands, $messsages, $commands, $bot;
 	function __construct()
 	{
 		$file = "commands.xml";
@@ -32,18 +32,44 @@ class usercommands
 		$this->commands = new commands;
 		for($i = 0; $i<count($this->ucommands); $i++)
 		{
-            if($this->messages->getCommand() == $this->ucommands->item[$i]->command)
-            {
-                $this->commands->send($this->replace($this->ucommands->item[$i]->trigger));
+			if($this->messages->getCommand() == $this->ucommands->item[$i]->command)
+			{
+				if(isset($this->ucommands->item[$i]->perm))
+				{
+					if($this->ucommands->item[$i]->perm == $this->messages->getSender())
+					{
+						$this->commands->send($this->replace($this->ucommands->item[$i]->trigger));
+					}
+				}
+				else
+				{
+					 $this->commands->send($this->replace($this->ucommands->item[$i]->trigger));
+				}
 				break;
-            }
+			}
 		}
-	}
-	
+}
+
 	function replace($msg)
 	{
-		$msg = str_replace('{$sender}', $this->messages->getSender(), $msg);
-		$msg = str_replace('{$args}', $this->messages->getArgs(), $msg);
+		$msg = str_replace('{$sender}', trim($this->messages->getSender()), $msg);
+		$msg = str_replace('{$args}', trim($this->messages->getArgs()), $msg);
+		$msg = str_replace('{$cmd}', trim($this->messages->getCommand()), $msg);
+		$msg = str_replace('{$channel}', trim($this->messages->getChannel()), $msg);
+		$msg = str_replace('{$time}', trim($this->messages->getTime()), $msg);
+		
+		//$msg = preg_replace('/\{\$arg(\d{1,})\}/', trim($this->messages->getArg('$2')), $msg);
+		//$msg = preg_replace('/\{\$arg(\d{1,})\}/', '$2', $msg);
+		preg_match_all('/\{\$arg(\d{1,})\}/', $msg, $matches);
+		if(!empty($matches))
+		{
+			foreach($matches[1] as $arg)
+			{
+				$msg = str_replace('{$arg'.$arg.'}', trim($this->messages->getArg($arg)), $msg);
+			}
+		}
+		
+		$msg = str_replace('{$soh}', chr(01), $msg);
 		return $msg;
 	}
 }

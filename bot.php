@@ -79,8 +79,9 @@ class bot
 	function get()
 	{
 		$input = (fgets($this->socket, 1024));
-		if (trim($input) != "")
+		if (rtrim($input) != "")
 		{
+			$input = rtrim($input);
 			$this->log('get', $input);
 			return $input;
 		}
@@ -90,7 +91,7 @@ class bot
 	{
 		$commands = new commands();
 		$messages = new messages($msg);
-		if (substr($msg, 0, 4) == 'PING')
+		if(substr($msg, 0, 4) == 'PING')
 		{
 			$commands->pong($msg);
 		}
@@ -110,7 +111,7 @@ class bot
 			$nickserv = nickserv::getInstance($this->user, $this->mail, $this->pass);
 			$nickserv->login();
 		}
-		elseif ($messages->getCommandPrefix() == "!")
+		elseif ($messages->getType() == "PRIVMSG" and $messages->getSender() != $this->user and $messages->getCommandPrefix() == "!")
 		{
 			$usercommands = new usercommands;
 			$usercommands->handler($msg);
