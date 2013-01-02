@@ -32,7 +32,7 @@ class usercommands
 		$this->commands = new commands;
 		for($i = 0; $i<count($this->ucommands); $i++)
 		{
-			if($this->messages->getCommand() == $this->ucommands->item[$i]->command)
+			if(strtoupper($this->messages->getCommand()) == strtoupper($this->ucommands->item[$i]->command))
 			{
 				if(isset($this->ucommands->item[$i]->perm))
 				{
