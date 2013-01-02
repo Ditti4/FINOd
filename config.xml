@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+	<host></host>
+	<port></port>
+	<user></user>
+	<channels>
+		<channel></channel>
+		<channel></channel>
+	</channels>
+	<nickserv>
+		<enable></enable>
+		<pass></pass>
+		<mail></mail>
+	</nickserv>
+</config>

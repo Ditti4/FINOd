@@ -97,7 +97,12 @@ class bot
 		}
 		elseif(strpos($msg, $this->user." :End of /MOTD command."))
 		{
-			$commands->join($this->channel);
+			var_dump($this->channel);
+			if(is_object($this->channel))
+			{
+				foreach($this->channel->channel as $channelitem)
+					$commands->join($channelitem);
+			}
 			//$commands->privmsg("#Brotkasten", "\xe4 \xc3\xb6 \xc3\xbc \xc3\x9f \xc3\x84 \xc3\x96 \xc3\x9c");
 			$commands->umode("+B");
 		}

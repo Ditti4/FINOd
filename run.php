@@ -41,35 +41,58 @@ class run
 	}
 }
 
-echo 'Server: ';
-$host = cin();
-echo 'Port: ';
-$port = cin();
-echo 'User: ';
-$user = cin();
-echo 'Channel: ';
-$channel = cin();
-echo 'Use NickServ? (default: n) ';
-$nickserv = cin();
-if ($nickserv == 'y')
+if(file_exists("config.xml"))
 {
-	echo 'Already registered? (default: n) ';
-	if (cin() != 'y')
+	$config = simplexml_load_file("config.xml");
+	$host = $config->host;
+	$port = (int)$config->port;
+	$user = $config->user;
+	//$channel = array();
+	//for($i = 0; $i<count($config->channels); $i++)
+		$channel = $config->channels;
+	$nickserv = $config->nickserv->enable;
+	if($nickserv == 'y')
 	{
-		echo 'Mail: ';
-		$mail = cin();
+		$pass = $config->nickserv->pass;
+		$mail = $config->nickserv->mail;
+	}
+	else
+	{
+		$pass = '';
+		$mail = '';
+	}
+}
+else{
+	echo 'Server: ';
+	$host = cin();
+	echo 'Port: ';
+	$port = cin();
+	echo 'User: ';
+	$user = cin();
+	echo 'Channel: ';
+	$channel = cin();
+	echo 'Use NickServ? (default: n) ';
+	$nickserv = cin();
+	if ($nickserv == 'y')
+	{
+		echo 'Already registered? (default: n) ';
+		if (cin() != 'y')
+		{
+			echo 'Mail: ';
+			$mail = cin();
+		}
+		else
+		{
+			$mail = "";
+		}
+		echo 'Password (be sure that nobody is behind you): ';
+			$pass = cin();
 	}
 	else
 	{
 		$mail = "";
+		$pass = "";
 	}
-	echo 'Password (be sure that nobody is behind you): ';
-		$pass = cin();
-}
-else
-{
-	$mail = "";
-	$pass = "";
 }
 
 $run = new run($host, $port, $user, $channel, $nickserv, $mail, $pass);
